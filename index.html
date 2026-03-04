@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>টাকা আয় করুন - Ultimate Bot</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            background: #020617; 
+            background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
+            color: white; 
+            font-family: 'Hind Siliguri', sans-serif; 
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .neon-box {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            position: relative;
+            overflow: hidden;
+            transition: 0.5s;
+        }
+
+        /* Withdraw Button Custom Styling */
+        .method-card {
+            border-radius: 20px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+        .method-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.5); }
+        .method-selected { 
+            border-color: #fff !important; 
+            transform: scale(1.05); 
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.3) !important;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 255, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+        }
+
+        .bg-bkash { background: linear-gradient(45deg, #e2136e, #ff4d94); }
+        .bg-rocket { background: linear-gradient(45deg, #8c3494, #bc69c4); }
+        .bg-nagad { background: linear-gradient(45deg, #f7941d, #ff6b00); }
+        .bg-recharge { background: linear-gradient(45deg, #00b894, #00cec9); }
+
+        .floating { animation: floating 3s ease-in-out infinite; }
+        @keyframes floating { 
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .grad-blue { background: linear-gradient(135deg, #00d2ff 0%, #3a7bd5 100%); }
+        .grad-purple { background: linear-gradient(135deg, #833ab4 0%, #fd1d1d 50%, #fcb045 100%); }
+        .grad-green { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); }
+        .grad-pink { background: linear-gradient(135deg, #FF3CAC 0%, #784BA0 50%, #2B86C5 100%); }
+
+        .btn-checkin {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(0, 242, 254, 0.3);
+            border-radius: 20px;
+            transition: 0.3s;
+        }
+        .claimed { background: #38ef7d !important; color: #000 !important; border-color: #38ef7d !important; }
+
+        .nav-item { transition: 0.4s; }
+        .active-nav { color: #00f2fe; filter: drop-shadow(0 0 10px #00f2fe); transform: translateY(-5px); }
+        input { background: rgba(255, 255, 255, 0.05) !important; border: 1px solid rgba(255, 255, 255, 0.1) !important; border-radius: 15px !important; }
+    </style>
+</head>
+<body class="pb-24">
+
+    <!-- HOME PAGE -->
+    <div id="home" class="p-5 page animate__animated animate__fadeIn">
+        <div class="neon-box p-6 mb-6 floating text-center">
+            <div class="relative inline-block">
+                <img id="user_img" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Lucky" class="w-24 h-24 rounded-full mx-auto border-4 border-cyan-400 p-1">
+                <div class="absolute -top-2 -right-2 bg-green-500 text-[10px] px-2 py-1 rounded-full animate-pulse">Live</div>
+            </div>
+            <h2 id="user_name" class="text-2xl font-black mt-3 text-cyan-400 tracking-wider">Loading...</h2>
+            <div class="bg-white/5 py-1 px-4 rounded-full inline-block text-[10px] text-gray-400 mt-1">ID: <span id="user_id">000000</span></div>
+            
+            <div class="grid grid-cols-2 gap-4 mt-6">
+                <div class="grad-blue p-4 rounded-3xl shadow-lg">
+                    <p class="text-[10px] uppercase font-bold text-white/80">মোট টাকা</p>
+                    <h3 class="text-xl font-black">৳ <span id="balance">0.00</span></h3>
+                </div>
+                <div class="grad-green p-4 rounded-3xl shadow-lg">
+                    <p class="text-[10px] uppercase font-bold text-white/80">এক্টিভ লাইভ</p>
+                    <h3 class="text-xl font-black"><span id="active_days">1</span> দিন</h3>
+                </div>
+            </div>
+        </div>
+
+        <h3 class="text-lg font-bold mb-4 flex items-center gap-2">💎 দৈনিক উপহার</h3>
+        <div class="flex gap-3 overflow-x-auto pb-4">
+            <button onclick="claimCheckin(1, 0.20)" id="day1" class="btn-checkin min-w-[70px] py-4 flex flex-col items-center"><span class="text-[10px]">দিন ১</span><b class="text-cyan-400">৳০.২</b></button>
+            <button onclick="claimCheckin(2, 0.30)" id="day2" class="btn-checkin min-w-[70px] py-4 flex flex-col items-center"><span class="text-[10px]">দিন ২</span><b class="text-cyan-400">৳০.৩</b></button>
+            <button onclick="claimCheckin(3, 0.40)" id="day3" class="btn-checkin min-w-[70px] py-4 flex flex-col items-center"><span class="text-[10px]">দিন ৩</span><b class="text-cyan-400">৳০.৪</b></button>
+            <button onclick="claimCheckin(4, 0.50)" id="day4" class="btn-checkin min-w-[70px] py-4 flex flex-col items-center"><span class="text-[10px]">দিন ৪</span><b class="text-cyan-400">৳০.৫</b></button>
+            <button onclick="claimCheckin(5, 0.60)" id="day5" class="btn-checkin min-w-[70px] py-4 flex flex-col items-center"><span class="text-[10px]">দিন ৫</span><b class="text-cyan-400">৳০.৬</b></button>
+            <button onclick="claimCheckin(6, 0.70)" id="day6" class="btn-checkin min-w-[70px] py-4 flex flex-col items-center"><span class="text-[10px]">দিন ৬</span><b class="text-cyan-400">৳০.৭</b></button>
+            <button onclick="claimCheckin(7, 1.00)" id="day7" class="btn-checkin min-w-[70px] py-4 flex flex-col items-center"><span class="text-[10px]">দিন ৭</span><b class="text-cyan-400">৳১.০</b></button>
+        </div>
+
+        <div class="neon-box p-6 grad-purple text-center border-none mt-4">
+            <h3 class="text-xl font-black mb-1">🎡 লাকি স্পিন</h3>
+            <div id="wheel" class="text-5xl my-4 transition-all duration-1000">🎡</div>
+            <button onclick="startSpin()" id="spin_btn" class="bg-white text-red-600 px-10 py-3 rounded-full font-black shadow-2xl hover:scale-105 active:scale-95 transition-all">স্পিন করুন</button>
+        </div>
+    </div>
+
+    <!-- TASK PAGE -->
+    <div id="tasks" class="hidden p-5 page animate__animated animate__fadeIn">
+        <div class="neon-box p-10 text-center border-t-4 border-cyan-400 bg-slate-900/50">
+            <h2 class="text-2xl font-black text-cyan-400 mb-2">৫০০ এ্যাড টাস্ক</h2>
+            <div class="w-full bg-white/5 h-4 rounded-full overflow-hidden p-1 border border-white/10">
+                <div id="ad_progress" class="bg-cyan-400 h-full rounded-full transition-all" style="width: 0%;"></div>
+            </div>
+            <p class="text-sm font-bold mt-2"><span id="ad_count">0</span> / 500</p>
+            <button onclick="watchMainAd()" class="mt-8 grad-blue px-12 py-4 rounded-3xl font-black text-white shadow-xl">START EARNING</button>
+        </div>
+
+        <h3 class="text-lg font-bold mt-10 mb-4">🚀 বোনাস আয় করুন</h3>
+        <div class="grid grid-cols-1 gap-5">
+            <div class="neon-box p-5 flex justify-between items-center grad-green text-black">
+                <div><h4 class="font-black">বোনাস বক্স ১</h4><p class="text-xs font-bold"><span id="b1_cnt">0</span>/5 Ads</p></div>
+                <button onclick="watchBonus(1)" id="b1_btn" class="bg-black text-white px-5 py-2 rounded-2xl text-xs font-black">এ্যাড দেখুন</button>
+            </div>
+            <div class="neon-box p-5 flex justify-between items-center grad-blue text-white">
+                <div><h4 class="font-black">বোনাস বক্স ২</h4><p class="text-xs font-bold"><span id="b2_cnt">0</span>/5 Ads</p></div>
+                <button onclick="watchBonus(2)" id="b2_btn" class="bg-white text-blue-900 px-5 py-2 rounded-2xl text-xs font-black">এ্যাড দেখুন</button>
+            </div>
+            <div class="neon-box p-5 flex justify-between items-center grad-pink text-white">
+                <div><h4 class="font-black">বোনাস বক্স ৩</h4><p class="text-xs font-bold"><span id="b3_cnt">0</span>/5 Ads</p></div>
+                <button onclick="watchBonus(3)" id="b3_btn" class="bg-white text-pink-900 px-5 py-2 rounded-2xl text-xs font-black">এ্যাড দেখুন</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- WITHDRAW PAGE -->
+    <div id="withdraw" class="hidden p-5 page animate__animated animate__fadeIn">
+        <div class="neon-box p-6 mb-6 border-l-8 border-pink-500 bg-pink-500/10">
+            <h2 class="text-2xl font-black text-pink-500">টাকা উত্তোলন</h2>
+            <p class="text-[10px] text-gray-400 uppercase tracking-tighter">৯ তারিখ রিকোয়েস্ট ১০ তারিখ পেমেন্ট</p>
+        </div>
+
+        <!-- NEW COLORFUL WITHDRAW BUTTONS -->
+        <div class="grid grid-cols-2 gap-4 mb-8">
+            <!-- Bkash -->
+            <div onclick="selectMethod('Bkash', 3000)" class="method-card bg-bkash p-4 flex flex-col items-center shadow-lg" id="m_bkash">
+                <img src="https://i.ibb.co/VpsP9yY/bkash-origami.jpg" class="w-14 h-14 mb-2 rounded-xl shadow-md object-cover border-2 border-white/20">
+                <span class="text-sm font-bold text-white">বিকাশ পেমেন্ট</span>
+            </div>
+            <!-- Rocket -->
+            <div onclick="selectMethod('Rocket', 3000)" class="method-card bg-rocket p-4 flex flex-col items-center shadow-lg" id="m_rocket">
+                <img src="https://i.ibb.co/683VwL5/rocket-logo.jpg" class="w-14 h-14 mb-2 rounded-xl shadow-md object-cover border-2 border-white/20">
+                <span class="text-sm font-bold text-white">রকেট পেমেন্ট</span>
+            </div>
+            <!-- Nagad -->
+            <div onclick="selectMethod('Nagad', 3000)" class="method-card bg-nagad p-4 flex flex-col items-center shadow-lg" id="m_nagad">
+                <img src="https://i.ibb.co/0fV9KzY/nagad-logo.jpg" class="w-14 h-14 mb-2 rounded-xl shadow-md object-cover border-2 border-white/20">
+                <span class="text-sm font-bold text-white">নগদ পেমেন্ট</span>
+            </div>
+            <!-- Recharge -->
+            <div onclick="selectMethod('Recharge', 200)" class="method-card bg-recharge p-4 flex flex-col items-center shadow-lg" id="m_recharge">
+                <img src="https://i.ibb.co/vXy0MhD/recharge-all.jpg" class="w-14 h-14 mb-2 rounded-xl shadow-md object-cover border-2 border-white/20">
+                <span class="text-sm font-bold text-white">মোবাইল রিচার্জ</span>
+            </div>
+        </div>
+
+        <div class="neon-box p-8 grad-blue text-white">
+            <input type="number" id="w_num" placeholder="মোবাইল নাম্বার" class="w-full p-4 mb-4 text-sm font-bold text-black bg-white">
+            <input type="number" id="w_amt" placeholder="টাকার পরিমাণ" class="w-full p-4 mb-6 text-sm font-bold text-black bg-white">
+            <button onclick="requestWithdraw()" class="w-full bg-black py-4 rounded-3xl font-black text-white shadow-2xl hover:bg-slate-900 transition-all">উত্তোলন করুন</button>
+        </div>
+    </div>
+
+    <!-- PROFILE PAGE -->
+    <div id="profile" class="hidden p-5 page animate__animated animate__fadeIn">
+        <div class="neon-box p-8 text-center mb-6">
+            <img id="p_user_img" src="https://api.dicebear.com/7.x/avataaars/svg?seed=Lucky" class="w-24 h-24 rounded-full mx-auto border-4 border-pink-500 p-1 mb-4">
+            <div class="space-y-3">
+                <div class="bg-white/5 p-4 rounded-3xl text-sm border border-white/10"><b>নাম:</b> <span id="p_user_name" class="text-cyan-400">User</span></div>
+                <div class="bg-white/5 p-4 rounded-3xl text-sm border border-white/10"><b>আইডি:</b> <span id="p_user_id" class="text-cyan-400">000000</span></div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 mb-8">
+            <div class="neon-box p-5 text-center grad-blue border-none">
+                <p class="text-[10px] font-bold uppercase text-white/80">ব্যালেন্স</p>
+                <h3 class="text-xl font-black">৳ <span id="p_balance">0.00</span></h3>
+            </div>
+            <div class="neon-box p-5 text-center grad-purple border-none">
+                <p class="text-[10px] font-bold uppercase text-white/80">রেফার</p>
+                <h3 class="text-xl font-black"><span id="p_ref">0</span> জন</h3>
+            </div>
+        </div>
+
+        <div class="neon-box p-5 mb-5 flex justify-between items-center grad-pink">
+            <input readonly id="ref_link" value="" class="bg-transparent border-none text-[10px] w-2/3 text-white/80">
+            <button onclick="copyRef()" class="bg-white text-pink-600 px-4 py-2 rounded-2xl text-[10px] font-black shadow-lg">কপি রেফার লিঙ্ক</button>
+        </div>
+
+        <button onclick="window.open('https://t.me/your_group', '_blank')" class="w-full neon-box p-5 flex justify-between items-center grad-green text-black font-black">
+            <span>🎧 সাপোর্ট গ্রুপে জয়েন</span><span class="bg-black text-white px-3 py-1 rounded-full">➔</span>
+        </button>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="fixed bottom-0 w-full bg-slate-950/80 backdrop-blur-3xl border-t border-white/10 flex justify-around p-4 z-50">
+        <button onclick="showPage('home')" id="n-home" class="nav-item active-nav flex flex-col items-center"><span class="text-2xl">🏠</span><span class="text-[10px] font-bold">হোম</span></button>
+        <button onclick="showPage('tasks')" id="n-tasks" class="nav-item flex flex-col items-center"><span class="text-2xl">🛠</span><span class="text-[10px] font-bold">টাকস</span></button>
+        <button onclick="showPage('withdraw')" id="n-withdraw" class="nav-item flex flex-col items-center"><span class="text-2xl">💰</span><span class="text-[10px] font-bold">উত্তোলন</span></button>
+        <button onclick="showPage('profile')" id="n-profile" class="nav-item flex flex-col items-center"><span class="text-2xl">👤</span><span class="text-[10px] font-bold">প্রোফাইল</span></button>
+    </nav>
+
+    <!-- FIREBASE INTEGRATION -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, set, get, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBNYIOf4viWb4Fr8LsBD7UITQ_TvihUyTU",
+            authDomain: "taka-income-ac393.firebaseapp.com",
+            databaseURL: "https://taka-income-ac393-default-rtdb.firebaseio.com",
+            projectId: "taka-income-ac393",
+            storageBucket: "taka-income-ac393.firebasestorage.app",
+            messagingSenderId: "121449287637",
+            appId: "1:121449287637:web:653a87ac1c56a5396ff75c"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+        const userId = tg.initDataUnsafe.user?.id || "guest_user";
+        const userName = tg.initDataUnsafe.user?.first_name || "ব্যবহারকারী";
+        const userImg = tg.initDataUnsafe.user?.photo_url || "https://api.dicebear.com/7.x/avataaars/svg?seed=Lucky";
+
+        let userData = {
+            balance: 0.00,
+            mainAds: 0,
+            refs: 0,
+            bonusCounters: { 1: 0, 2: 0, 3: 0 },
+            lastSpinDate: "",
+            claimedDays: []
+        };
+
+        async function initUserData() {
+            const userRef = ref(db, 'users/' + userId);
+            const snapshot = await get(userRef);
+            if (snapshot.exists()) {
+                userData = snapshot.val();
+            } else {
+                await set(userRef, {
+                    name: userName,
+                    balance: 0,
+                    mainAds: 0,
+                    refs: 0,
+                    bonusCounters: { 1: 0, 2: 0, 3: 0 },
+                    lastSpinDate: "",
+                    claimedDays: []
+                });
+            }
+            updateUI();
+        }
+
+        function updateUI() {
+            document.getElementById('balance').innerText = document.getElementById('p_balance').innerText = userData.balance.toFixed(2);
+            document.getElementById('ad_count').innerText = userData.mainAds;
+            document.getElementById('ad_progress').style.width = (userData.mainAds / 500 * 100) + "%";
+            document.getElementById('p_ref').innerText = userData.refs;
+            document.getElementById('b1_cnt').innerText = userData.bonusCounters[1];
+            document.getElementById('b2_cnt').innerText = userData.bonusCounters[2];
+            document.getElementById('b3_cnt').innerText = userData.bonusCounters[3];
+            userData.claimedDays?.forEach(day => {
+                let btn = document.getElementById('day' + day);
+                if(btn) { btn.classList.add('claimed'); btn.innerText = "✓"; }
+            });
+        }
+
+        window.saveData = function() {
+            update(ref(db, 'users/' + userId), userData);
+            updateUI();
+        }
+
+        // Functions exposed to Window for onclick access
+        window.startSpin = function() {
+            let today = new Date().toDateString();
+            if(userData.lastSpinDate === today) { tg.showAlert("আজকের স্পিন শেষ! আগামীকাল আবার ট্রাই করুন।"); return; }
+            let wheel = document.getElementById('wheel');
+            wheel.style.transform = "rotate(1080deg)";
+            setTimeout(() => {
+                let win = parseFloat((Math.random() * (2 - 0.2) + 0.2).toFixed(2));
+                userData.balance += win;
+                userData.lastSpinDate = today;
+                wheel.style.transform = "rotate(0deg)";
+                saveData();
+                tg.showAlert(`🎉 অভিনন্দন! আপনি ৳${win} জিতেছেন।`);
+            }, 1000);
+        }
+
+        window.watchMainAd = function() {
+            if(userData.mainAds >= 500) { tg.showAlert("আজকের সীমা শেষ!"); return; }
+            userData.mainAds++;
+            userData.balance += 0.05;
+            saveData();
+            tg.showAlert("এ্যাড সফল! ৫ পয়সা যোগ হয়েছে।");
+        }
+
+        window.watchBonus = function(boxNum) {
+            if(userData.bonusCounters[boxNum] < 5) {
+                userData.bonusCounters[boxNum]++;
+                saveData();
+                window.open("https://adexora.com/", "_blank");
+                if(userData.bonusCounters[boxNum] === 5) {
+                    let btn = document.getElementById(`b${boxNum}_btn`);
+                    btn.innerText = "CLAIM ৳০.২";
+                    btn.onclick = () => {
+                        userData.balance += 0.20;
+                        userData.bonusCounters[boxNum] = 0;
+                        saveData();
+                        btn.innerText = "এ্যাড দেখুন";
+                        btn.onclick = () => watchBonus(boxNum);
+                        tg.showAlert("বোনাস যোগ হয়েছে!");
+                    };
+                }
+            }
+        }
+
+        window.claimCheckin = function(d, a) {
+            if(userData.claimedDays?.includes(d)) return;
+            if(!userData.claimedDays) userData.claimedDays = [];
+            userData.balance += a;
+            userData.claimedDays.push(d);
+            saveData();
+        }
+
+        window.requestWithdraw = function() {
+            let num = document.getElementById('w_num').value;
+            let amt = parseFloat(document.getElementById('w_amt').value);
+            let today = new Date().getDate();
+            if(today !== 9) { tg.showAlert("শুধুমাত্র ৯ তারিখে উত্তোলন করা যাবে!"); return; }
+            if(!window.selectedMethodName || amt < window.minAmt) { tg.showAlert(`সঠিক তথ্য দিন! নূন্যতম ৳${window.minAmt}`); return; }
+            if(userData.balance < amt) { tg.showAlert("ব্যালেন্স নেই!"); return; }
+            userData.balance -= amt;
+            saveData();
+            set(ref(db, 'withdraws/' + Date.now()), { userId, userName, num, amt, method: window.selectedMethodName, status: "Pending" });
+            tg.showAlert("✅ রিকোয়েস্ট সফল!");
+        }
+
+        window.showPage = function(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active-nav'));
+            document.getElementById('n-' + id).classList.add('active-nav');
+        }
+
+        window.selectMethod = function(m, min) {
+            window.selectedMethodName = m; window.minAmt = min;
+            document.querySelectorAll('.method-card').forEach(c => c.classList.remove('method-selected'));
+            document.getElementById('m_'+m.toLowerCase()).classList.add('method-selected');
+        }
+
+        window.copyRef = function() {
+            navigator.clipboard.writeText(document.getElementById('ref_link').value);
+            tg.showAlert("লিঙ্ক কপি হয়েছে!");
+        }
+
+        document.getElementById('user_name').innerText = document.getElementById('p_user_name').innerText = userName;
+        document.getElementById('user_id').innerText = document.getElementById('p_user_id').innerText = userId;
+        document.getElementById('user_img').src = document.getElementById('p_user_img').src = userImg;
+        document.getElementById('ref_link').value = `https://t.me/Takaaikorun_bot?start=${userId}`;
+
+        initUserData();
+    </script>
+</body>
+</html>
