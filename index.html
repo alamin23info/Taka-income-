@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -10,103 +12,163 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #00f2fe;
+            --secondary: #ff0055;
+            --accent: #7000ff;
+        }
+
         body { 
             background: #020617; 
-            background-image: radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), radial-gradient(at 50% 0%, hsla(225,39%,30%,1) 0, transparent 50%), radial-gradient(at 100% 0%, hsla(339,49%,30%,1) 0, transparent 50%);
-            color: white; font-family: 'Hind Siliguri', sans-serif; overflow-x: hidden; min-height: 100vh;
-        }
-
-        /* 🎥 UNIQUE LIFELIKE MESH ANIMATION */
-        @keyframes meshFlow {
-            0% { background-position: 0% 50%, 50% 100%; }
-            50% { background-position: 100% 50%, 0% 0%; }
-            100% { background-position: 0% 50%, 50% 100%; }
-        }
-
-        .unique-vivid-box {
-            background: linear-gradient(45deg, #ff0055, #00f2fe, #7000ff);
-            background-size: 200% 200%;
-            animation: meshFlow 5s ease infinite;
-            border-radius: 20px;
+            color: white; 
+            font-family: 'Hind Siliguri', sans-serif; 
+            overflow-x: hidden; 
+            min-height: 100vh;
             position: relative;
-            z-index: 1;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.2);
         }
 
-        .unique-vivid-box::before {
-            content: ""; position: absolute; top: -2px; left: -2px; right: -2px; bottom: -2px;
-            background: linear-gradient(90deg, #ff0055, #00f2fe, #ff0055);
-            background-size: 200% auto;
-            animation: meshFlow 3s linear infinite;
-            z-index: -1; opacity: 0.5;
+        /* 🎥 ANIMATED LIVE MESH BACKGROUND (ভিডিওর মতো ব্যাকগ্রাউন্ড) */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: 
+                radial-gradient(circle at 0% 0%, rgba(112, 0, 255, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(255, 0, 85, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(0, 242, 254, 0.1) 0%, transparent 50%);
+            z-index: -1;
+            animation: meshMove 15s ease infinite alternate;
         }
 
+        @keyframes meshMove {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.2) rotate(5deg); }
+        }
+
+        /* ✨ GLASSMORPHISM BOX (জীবন্ত বক্স ডিজাইন) */
         .neon-box {
             background: rgba(255, 255, 255, 0.03);
-            backdrop-filter: blur(20px);
-            border-radius: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            position: relative;
+            overflow: hidden;
         }
 
-        /* SPIN WHEEL */
-        .wheel-outer { position: relative; width: 220px; height: 220px; margin: 20px auto; }
+        .neon-box::after {
+            content: "";
+            position: absolute;
+            top: -50%; left: -50%; width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.05), transparent);
+            transform: rotate(45deg);
+            animation: shine 6s infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* 🌈 VIVID BOX ANIMATION */
+        .unique-vivid-box {
+            background: linear-gradient(-45deg, #ff0055, #7000ff, #00f2fe, #ff0055);
+            background-size: 400% 400%;
+            animation: gradientFlow 8s ease infinite;
+            border-radius: 20px;
+            transition: transform 0.3s;
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* 🎡 WHEEL DESIGN IMPROVEMENT */
         #main_wheel {
-            width: 100%; height: 100%; border-radius: 50%; border: 8px solid #0f172a;
-            background: conic-gradient(#ff0055 0deg 60deg, #00ffcc 60deg 120deg, #ffcc00 120deg 180deg, #0066ff 180deg 240deg, #cc00ff 240deg 300deg, #ff6600 300deg 360deg);
-            transition: transform 4s cubic-bezier(0.15, 0, 0.15, 1);
-            box-shadow: 0 0 40px rgba(0, 242, 254, 0.3);
+            box-shadow: 0 0 50px rgba(0, 242, 254, 0.2), inset 0 0 20px rgba(0,0,0,0.5);
+            border: 6px solid rgba(255, 255, 255, 0.1);
         }
-        .needle { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); width: 35px; height: 45px; background: white; clip-path: polygon(50% 100%, 0 0, 100% 0); z-index: 10; filter: drop-shadow(0 0 10px #fff); }
 
-        .btn-checkin { background: rgba(255, 255, 255, 0.05); border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 15px; transition: 0.3s; }
-        .claimed { background: #38ef7d !important; color: #000 !important; border-color: #38ef7d !important; }
-        .available { animation: pulse-green 2s infinite; border-color: #00f2fe; }
-        @keyframes pulse-green { 0% { box-shadow: 0 0 0 0 rgba(0, 242, 254, 0.5); } 70% { box-shadow: 0 0 0 15px rgba(0, 242, 254, 0); } 100% { box-shadow: 0 0 0 0 rgba(0, 242, 254, 0); } }
+        /* 📱 PAGE TRANSITION */
+        .page { display: none; transform: translateY(20px); opacity: 0; transition: all 0.5s ease; }
+        .page-active { display: block !important; transform: translateY(0); opacity: 1; }
 
-        .active-nav { color: #00f2fe; filter: drop-shadow(0 0 10px #00f2fe); transform: translateY(-8px); }
-        .method-card { border-radius: 15px; transition: 0.3s; border: 2px solid rgba(255, 255, 255, 0.05); }
-        .method-selected { border-color: #fff !important; transform: scale(1.05); box-shadow: 0 0 20px rgba(255,255,255,0.2); }
+        /* 🔘 BUTTON STYLES */
+        .btn-checkin { 
+            background: rgba(255, 255, 255, 0.05); 
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            transition: 0.3s;
+        }
+        .claimed { background: linear-gradient(to bottom, #38ef7d, #11998e) !important; color: black !important; font-weight: bold; }
+        .available { animation: pulseGlow 2s infinite; border-color: var(--primary); }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 0 0 rgba(0, 242, 254, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 242, 254, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 242, 254, 0); }
+        }
+
+        /* 🏠 NAV BAR GLASS */
+        nav {
+            background: rgba(2, 6, 23, 0.8) !important;
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .active-nav { color: var(--primary); transform: translateY(-5px); filter: drop-shadow(0 0 8px var(--primary)); }
+
+        .method-card { cursor: pointer; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .method-selected { transform: scale(1.08); border: 2px solid white !important; box-shadow: 0 0 20px rgba(255,255,255,0.3); }
+
+        /* Hide scrollbar */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body class="pb-24">
 
     <!-- HOME PAGE -->
-    <div id="home" class="p-5 page animate__animated animate__fadeIn">
-        <div class="neon-box p-6 mb-6 text-center">
-            <img id="user_img" src="" class="w-20 h-20 rounded-full mx-auto border-4 border-cyan-400 p-1 mb-3">
-            <h2 id="user_name" class="text-xl font-black text-white">Loading...</h2>
-            <div class="grid grid-cols-2 gap-4 mt-4">
-                <div class="unique-vivid-box p-4">
-                    <p class="text-[10px] font-bold uppercase">ব্যালেন্স</p>
+    <div id="home" class="p-5 page page-active">
+        <div class="neon-box p-6 mb-6 text-center animate__animated animate__fadeInDown">
+            <div class="relative inline-block">
+                <img id="user_img" src="" class="w-20 h-20 rounded-full mx-auto border-4 border-cyan-400 p-1 mb-3">
+                <div class="absolute bottom-3 right-0 w-5 h-5 bg-green-500 border-2 border-white rounded-full"></div>
+            </div>
+            <h2 id="user_name" class="text-xl font-black text-white tracking-wide">Loading...</h2>
+            <div class="grid grid-cols-2 gap-4 mt-5">
+                <div class="unique-vivid-box p-4 shadow-xl">
+                    <p class="text-[10px] font-bold uppercase opacity-80">ব্যালেন্স</p>
                     <h3 class="text-lg font-black">৳ <span id="balance">0.00</span></h3>
                 </div>
-                <div class="unique-vivid-box p-4">
-                    <p class="text-[10px] font-bold uppercase">একটিভ দিন</p>
+                <div class="unique-vivid-box p-4 shadow-xl">
+                    <p class="text-[10px] font-bold uppercase opacity-80">একটিভ দিন</p>
                     <h3 class="text-lg font-black"><span id="active_days">1</span> দিন</h3>
                 </div>
             </div>
         </div>
 
-        <h3 class="text-md font-bold mb-4">🎁 ডেইলি উপহার</h3>
+        <h3 class="text-md font-bold mb-4 flex items-center gap-2"><span class="text-xl">🎁</span> ডেইলি উপহার</h3>
         <div class="flex gap-3 overflow-x-auto pb-4 no-scrollbar">
-            <button id="day1" class="btn-checkin min-w-[75px] py-4 flex flex-col items-center"><span>দিন ১</span><b>৳০.২</b></button>
-            <button id="day2" class="btn-checkin min-w-[75px] py-4 flex flex-col items-center"><span>দিন ২</span><b>৳০.৩</b></button>
-            <button id="day3" class="btn-checkin min-w-[75px] py-4 flex flex-col items-center"><span>দিন ৩</span><b>৳০.৪</b></button>
-            <button id="day4" class="btn-checkin min-w-[75px] py-4 flex flex-col items-center"><span>দিন ৪</span><b>৳০.৫</b></button>
-            <button id="day5" class="btn-checkin min-w-[75px] py-4 flex flex-col items-center"><span>দিন ৫</span><b>৳০.৬</b></button>
-            <button id="day6" class="btn-checkin min-w-[75px] py-4 flex flex-col items-center"><span>দিন ৬</span><b>৳০.৭</b></button>
-            <button id="day7" class="btn-checkin min-w-[75px] py-4 flex flex-col items-center"><span>দিন ৭</span><b>৳১.০</b></button>
+            <button id="day1" class="btn-checkin min-w-[85px] py-4 flex flex-col items-center rounded-2xl"><span>দিন ১</span><b>৳০.২</b></button>
+            <button id="day2" class="btn-checkin min-w-[85px] py-4 flex flex-col items-center rounded-2xl"><span>দিন ২</span><b>৳০.৩</b></button>
+            <button id="day3" class="btn-checkin min-w-[85px] py-4 flex flex-col items-center rounded-2xl"><span>দিন ৩</span><b>৳০.৪</b></button>
+            <button id="day4" class="btn-checkin min-w-[85px] py-4 flex flex-col items-center rounded-2xl"><span>দিন ৪</span><b>৳০.৫</b></button>
+            <button id="day5" class="btn-checkin min-w-[85px] py-4 flex flex-col items-center rounded-2xl"><span>দিন ৫</span><b>৳০.৬</b></button>
+            <button id="day6" class="btn-checkin min-w-[85px] py-4 flex flex-col items-center rounded-2xl"><span>দিন ৬</span><b>৳০.৭</b></button>
+            <button id="day7" class="btn-checkin min-w-[85px] py-4 flex flex-col items-center rounded-2xl"><span>দিন ৭</span><b>৳১.০</b></button>
         </div>
 
         <div class="neon-box p-6 text-center mt-4">
-            <h3 class="text-md font-black mb-1 text-pink-400">🎡 লাকি স্পিন</h3>
+            <h3 class="text-md font-black mb-1 text-pink-400 flex justify-center items-center gap-2">
+                <span class="animate-spin-slow">🎡</span> লাকি স্পিন
+            </h3>
             <div class="wheel-outer">
                 <div class="needle"></div>
                 <div id="main_wheel"></div>
             </div>
-            <button id="spin_btn" class="unique-vivid-box px-12 py-3 rounded-full font-black text-white border-none shadow-lg mt-2">স্পিন করুন</button>
+            <button id="spin_btn" class="unique-vivid-box px-12 py-3 rounded-full font-black text-white border-none shadow-lg mt-2 active:scale-95 transition-transform">স্পিন করুন</button>
         </div>
 
         <div class="neon-box p-6 mt-6">
@@ -118,96 +180,95 @@
     </div>
 
     <!-- TASK PAGE -->
-    <div id="tasks" class="hidden p-5 page animate__animated animate__fadeIn">
+    <div id="tasks" class="p-5 page">
         <div class="neon-box p-8 text-center mb-6">
             <h2 class="text-xl font-black text-cyan-400">৫০০ এ্যাড টাস্ক</h2>
-            <div class="w-full bg-white/5 h-3 rounded-full overflow-hidden my-3">
-                <div id="ad_progress" class="bg-cyan-500 h-full transition-all" style="width: 0%;"></div>
+            <div class="w-full bg-white/5 h-4 rounded-full overflow-hidden my-4 border border-white/10">
+                <div id="ad_progress" class="bg-gradient-to-r from-cyan-500 to-blue-600 h-full transition-all duration-700" style="width: 0%;"></div>
             </div>
-            <p class="text-xs mb-4"><span id="ad_count">0</span> / 500</p>
-            <button id="main_ad_btn" class="unique-vivid-box px-12 py-4 rounded-2xl font-black text-white">START EARNING</button>
+            <p class="text-xs mb-5 font-bold"><span id="ad_count" class="text-lg text-white">0</span> / 500 Ads</p>
+            <button id="main_ad_btn" class="unique-vivid-box w-full py-4 rounded-2xl font-black text-white shadow-lg">START EARNING</button>
         </div>
 
-        <h3 class="text-md font-bold mb-4">🚀 বোনাস আয়</h3>
+        <h3 class="text-md font-bold mb-4">🚀 বোনাস আয় (বক্স)</h3>
         <div class="space-y-4">
-            <div class="unique-vivid-box p-5 flex justify-between items-center text-white">
-                <div><h4 class="font-black">বক্স ১</h4><p class="text-xs"><span id="b1_cnt">0</span>/5 Ads</p></div>
-                <button id="b1_btn" class="bg-white text-black px-5 py-2 rounded-xl text-xs font-black shadow-xl">এ্যাড দেখুন</button>
+            <div class="neon-box p-5 flex justify-between items-center">
+                <div><h4 class="font-black">বক্স ১</h4><p class="text-[10px] opacity-60"><span id="b1_cnt">0</span>/5 Ads</p></div>
+                <button id="b1_btn" class="unique-vivid-box px-6 py-2 rounded-xl text-xs font-black">এ্যাড দেখুন</button>
             </div>
-            <div class="unique-vivid-box p-5 flex justify-between items-center text-white">
-                <div><h4 class="font-black">বক্স ২</h4><p class="text-xs"><span id="b2_cnt">0</span>/5 Ads</p></div>
-                <button id="b2_btn" class="bg-white text-black px-5 py-2 rounded-xl text-xs font-black shadow-xl">এ্যাড দেখুন</button>
+            <div class="neon-box p-5 flex justify-between items-center">
+                <div><h4 class="font-black">বক্স ২</h4><p class="text-[10px] opacity-60"><span id="b2_cnt">0</span>/5 Ads</p></div>
+                <button id="b2_btn" class="unique-vivid-box px-6 py-2 rounded-xl text-xs font-black">এ্যাড দেখুন</button>
             </div>
-            <div class="unique-vivid-box p-5 flex justify-between items-center text-white">
-                <div><h4 class="font-black">বক্স ৩</h4><p class="text-xs"><span id="b3_cnt">0</span>/5 Ads</p></div>
-                <button id="b3_btn" class="bg-white text-black px-5 py-2 rounded-xl text-xs font-black shadow-xl">এ্যাড দেখুন</button>
+            <div class="neon-box p-5 flex justify-between items-center">
+                <div><h4 class="font-black">বক্স ৩</h4><p class="text-[10px] opacity-60"><span id="b3_cnt">0</span>/5 Ads</p></div>
+                <button id="b3_btn" class="unique-vivid-box px-6 py-2 rounded-xl text-xs font-black">এ্যাড দেখুন</button>
             </div>
         </div>
     </div>
 
     <!-- WITHDRAW PAGE -->
-    <div id="withdraw" class="hidden p-5 page animate__animated animate__fadeIn">
-        <div class="neon-box p-6 mb-6 border-l-8 border-cyan-400">
+    <div id="withdraw" class="p-5 page">
+        <div class="neon-box p-6 mb-6 border-l-8 border-cyan-400 animate__animated animate__slideInLeft">
             <h2 class="text-xl font-black">টাকা উত্তোলন</h2>
             <p class="text-[10px] uppercase opacity-70">৯ তারিখ রিকোয়েস্ট ১০ তারিখ পেমেন্ট</p>
         </div>
         <div class="grid grid-cols-2 gap-3 mb-6">
-            <div id="m_bkash" class="method-card bg-pink-600 p-4 text-center font-bold">বিকাশ</div>
-            <div id="m_nagad" class="method-card bg-orange-600 p-4 text-center font-bold">নগদ</div>
-            <div id="m_rocket" class="method-card bg-purple-600 p-4 text-center font-bold">রকেট</div>
-            <div id="m_recharge" class="method-card bg-cyan-600 p-4 text-center font-bold">রিচার্জ</div>
+            <div id="m_bkash" class="method-card bg-pink-600 p-4 text-center rounded-2xl font-bold shadow-lg">বিকাশ</div>
+            <div id="m_nagad" class="method-card bg-orange-600 p-4 text-center rounded-2xl font-bold shadow-lg">নগদ</div>
+            <div id="m_rocket" class="method-card bg-purple-600 p-4 text-center rounded-2xl font-bold shadow-lg">রকেট</div>
+            <div id="m_recharge" class="method-card bg-cyan-600 p-4 text-center rounded-2xl font-bold shadow-lg">রিচার্জ</div>
         </div>
         <div class="neon-box p-6">
-            <input type="number" id="w_num" placeholder="মোবাইল নাম্বার" class="w-full p-4 mb-4 rounded-xl bg-white/10 text-white outline-none">
-            <input type="number" id="w_amt" placeholder="টাকার পরিমাণ" class="w-full p-4 mb-6 rounded-xl bg-white/10 text-white outline-none">
-            <button id="withdraw_confirm_btn" class="w-full unique-vivid-box py-4 rounded-2xl font-black text-white">উত্তোলন করুন</button>
+            <input type="number" id="w_num" placeholder="মোবাইল নাম্বার" class="w-full p-4 mb-4 rounded-xl bg-white/5 border border-white/10 text-white outline-none focus:border-cyan-400 transition-all">
+            <input type="number" id="w_amt" placeholder="টাকার পরিমাণ" class="w-full p-4 mb-6 rounded-xl bg-white/5 border border-white/10 text-white outline-none focus:border-cyan-400 transition-all">
+            <button id="withdraw_confirm_btn" class="w-full unique-vivid-box py-4 rounded-2xl font-black text-white shadow-2xl">উত্তোলন করুন</button>
         </div>
     </div>
 
     <!-- PROFILE PAGE -->
-    <div id="profile" class="hidden p-5 page animate__animated animate__fadeIn">
-        <div class="neon-box p-8 text-center mb-6">
-            <img id="p_user_img" src="" class="w-20 h-20 rounded-full mx-auto border-4 border-pink-500 p-1 mb-3">
-            <h2 id="p_user_name" class="font-black text-white text-xl">User</h2>
-            <p id="p_user_id" class="text-xs text-gray-400 mb-6">ID: 000000</p>
+    <div id="profile" class="p-5 page">
+        <div class="neon-box p-8 text-center mb-6 animate__animated animate__zoomIn">
+            <img id="p_user_img" src="" class="w-24 h-24 rounded-full mx-auto border-4 border-pink-500 p-1 mb-4 shadow-2xl">
+            <h2 id="p_user_name" class="font-black text-white text-2xl tracking-tight">User</h2>
+            <p id="p_user_id" class="text-xs text-gray-400 mb-6 bg-white/5 inline-block px-3 py-1 rounded-full">ID: 000000</p>
             <div class="grid grid-cols-2 gap-4">
                 <div class="unique-vivid-box p-4">
-                    <p class="text-[10px] uppercase">ব্যালেন্স</p>
+                    <p class="text-[10px] uppercase opacity-80">ব্যালেন্স</p>
                     <h3 class="text-lg font-black">৳ <span id="p_balance">0.00</span></h3>
                 </div>
                 <div class="unique-vivid-box p-4">
-                    <p class="text-[10px] uppercase">রেফার</p>
+                    <p class="text-[10px] uppercase opacity-80">রেফার</p>
                     <h3 class="text-lg font-black"><span id="p_ref">0</span> জন</h3>
                 </div>
             </div>
         </div>
 
-        <a href="https://t.me/YOUR_SUPPORT_CHANNEL" target="_blank" class="unique-vivid-box block w-full p-5 text-center font-black text-white mb-6 animate__animated animate__pulse animate__infinite">
-            📢 জয়েন সাপোর্ট গ্রুপ
+        <a href="https://t.me/YOUR_SUPPORT_CHANNEL" target="_blank" class="unique-vivid-box block w-full p-5 text-center font-black text-white mb-6 animate__animated animate__pulse animate__infinite shadow-lg">
+            📢 জয়েন সাপোর্ট গ্রুপ
         </a>
 
         <div class="neon-box p-5">
-            <h4 class="text-xs font-bold mb-2">রেফার লিঙ্ক:</h4>
+            <h4 class="text-xs font-bold mb-3 opacity-60">আপনার রেফার লিঙ্ক:</h4>
             <div class="flex gap-2">
-                <input readonly id="ref_link" value="" class="bg-black/20 p-3 rounded-lg text-[10px] w-full text-cyan-400">
-                <button id="copy_btn" class="bg-cyan-500 text-black px-4 rounded-lg font-black text-[10px]">COPY</button>
+                <input readonly id="ref_link" value="" class="bg-black/40 p-3 rounded-lg text-[10px] w-full text-cyan-400 border border-white/5">
+                <button id="copy_btn" class="bg-cyan-500 text-black px-5 rounded-lg font-black text-[10px] active:scale-90 transition-all">COPY</button>
             </div>
         </div>
     </div>
 
     <!-- NAVBAR -->
-    <nav class="fixed bottom-0 w-full bg-slate-950/90 backdrop-blur-3xl border-t border-white/10 flex justify-around p-4 z-50">
-        <button id="nav_home" class="nav-item active-nav flex flex-col items-center"><span class="text-xl">🏠</span><span class="text-[10px]">হোম</span></button>
-        <button id="nav_tasks" class="nav-item flex flex-col items-center"><span class="text-xl">🛠</span><span class="text-[10px]">টাকস</span></button>
-        <button id="nav_withdraw" class="nav-item flex flex-col items-center"><span class="text-xl">💰</span><span class="text-[10px]">উত্তোলন</span></button>
-        <button id="nav_profile" class="nav-item flex flex-col items-center"><span class="text-xl">👤</span><span class="text-[10px]">প্রোফাইল</span></button>
+    <nav class="fixed bottom-0 w-full flex justify-around p-4 z-50">
+        <button id="nav_home" class="nav-item active-nav flex flex-col items-center transition-all duration-300"><span class="text-2xl">🏠</span><span class="text-[10px] font-bold">হোম</span></button>
+        <button id="nav_tasks" class="nav-item flex flex-col items-center transition-all duration-300"><span class="text-2xl">🛠</span><span class="text-[10px] font-bold">টাকস</span></button>
+        <button id="nav_withdraw" class="nav-item flex flex-col items-center transition-all duration-300"><span class="text-2xl">💰</span><span class="text-[10px] font-bold">উত্তোলন</span></button>
+        <button id="nav_profile" class="nav-item flex flex-col items-center transition-all duration-300"><span class="text-2xl">👤</span><span class="text-[10px] font-bold">প্রোফাইল</span></button>
     </nav>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getDatabase, ref, set, get, update, query, orderByChild, limitToLast } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-        // 🔥 FIREBASE (UNCHANGED)
         const firebaseConfig = {
             apiKey: "AIzaSyBNYIOf4viWb4Fr8LsBD7UITQ_TvihUyTU",
             authDomain: "taka-income-ac393.firebaseapp.com",
@@ -231,7 +292,7 @@
 
         async function initUserData() {
             const snapshot = await get(ref(db, 'users/' + userId));
-            if (snapshot.exists()) { userData = snapshot.val(); } 
+            if (snapshot.exists()) { userData = { ...userData, ...snapshot.val() }; } 
             else { await set(ref(db, 'users/' + userId), { ...userData, name: userName }); }
             
             document.getElementById('user_name').innerText = document.getElementById('p_user_name').innerText = userName;
@@ -255,16 +316,22 @@
             let today = new Date().toDateString();
             for(let i=1; i<=7; i++) {
                 let btn = document.getElementById('day' + i);
-                if(i <= userData.claimedDaysCount) { btn.classList.add('claimed'); btn.innerHTML = `<span>দিন ${i}</span><b>✓</b>`; }
-                else if(i === userData.claimedDaysCount + 1 && userData.lastCheckinDate !== today) { btn.classList.add('available'); }
+                btn.classList.remove('claimed', 'available');
+                if(i <= userData.claimedDaysCount) { 
+                    btn.classList.add('claimed'); 
+                    btn.querySelector('b').innerText = "✓"; 
+                }
+                else if(i === userData.claimedDaysCount + 1 && userData.lastCheckinDate !== today) { 
+                    btn.classList.add('available'); 
+                }
             }
         }
 
         const saveData = () => { update(ref(db, 'users/' + userId), userData); updateUI(); }
 
-        // 🎡 SPIN LOGIC (FIXED)
+        // SPIN
         let rot = 0;
-        const startSpin = () => {
+        document.getElementById('spin_btn').onclick = () => {
             let today = new Date().toDateString();
             if(userData.lastSpinDate === today) { tg.showAlert("আজকের স্পিন শেষ!"); return; }
             const btn = document.getElementById('spin_btn');
@@ -277,68 +344,32 @@
                 tg.showAlert(`🎉 অভিনন্দন! আপনি ৳${win} জিতেছেন।`);
                 btn.disabled = false;
             }, 4000);
-        }
-        document.getElementById('spin_btn').onclick = startSpin;
+        };
 
-        // 🛠 ADS & TASKS
-        const watchMainAd = () => {
-            if(userData.mainAds >= 500) { tg.showAlert("সীমা শেষ!"); return; }
+        const callAd = (callback) => {
             if(typeof window.showAdexora === 'function') {
-                window.showAdexora().then(() => {
-                    userData.mainAds++; userData.balance += 0.05; saveData();
-                });
-            } else { tg.showAlert("এ্যাড লোড হচ্ছে না..."); }
+                window.showAdexora().then(callback).catch(() => tg.showAlert("এ্যাড লোড হতে সমস্যা হচ্ছে।"));
+            } else { tg.showAlert("এ্যাড সার্ভিস বর্তমানে বন্ধ আছে।"); }
         }
-        document.getElementById('main_ad_btn').onclick = watchMainAd;
+
+        document.getElementById('main_ad_btn').onclick = () => {
+            if(userData.mainAds >= 500) { tg.showAlert("সীমা শেষ!"); return; }
+            callAd(() => { userData.mainAds++; userData.balance += 0.05; saveData(); });
+        };
 
         const watchBonus = (num) => {
             if(userData.bonusCounters[num] < 5) {
-                if(typeof window.showAdexora === 'function') {
-                    window.showAdexora().then(() => {
-                        userData.bonusCounters[num]++; saveData();
-                        if(userData.bonusCounters[num] === 5) {
-                            let btn = document.getElementById(`b${num}_btn`);
-                            btn.innerText = "CLAIM"; btn.onclick = () => {
-                                userData.balance += 0.20; userData.bonusCounters[num] = 0; saveData();
-                                btn.innerText = "এ্যাড দেখুন"; btn.onclick = () => watchBonus(num);
-                            };
-                        }
-                    });
-                }
+                callAd(() => {
+                    userData.bonusCounters[num]++; saveData();
+                    if(userData.bonusCounters[num] === 5) {
+                        document.getElementById(`b${num}_btn`).innerText = "CLAIM";
+                    }
+                });
+            } else {
+                userData.balance += 0.20; userData.bonusCounters[num] = 0; 
+                document.getElementById(`b${num}_btn`).innerText = "এ্যাড দেখুন";
+                saveData(); tg.showAlert("বোনাস যুক্ত হয়েছে!");
             }
         }
         document.getElementById('b1_btn').onclick = () => watchBonus(1);
-        document.getElementById('b2_btn').onclick = () => watchBonus(2);
-        document.getElementById('b3_btn').onclick = () => watchBonus(3);
-
-        // 💰 WITHDRAW
-        let selectedMethod = ""; let min = 0;
-        const setMethod = (m, amt) => {
-            selectedMethod = m; min = amt;
-            document.querySelectorAll('.method-card').forEach(el => el.classList.remove('method-selected'));
-            document.getElementById('m_' + m.toLowerCase()).classList.add('method-selected');
-        }
-        document.getElementById('m_bkash').onclick = () => setMethod('Bkash', 3000);
-        document.getElementById('m_nagad').onclick = () => setMethod('Nagad', 3000);
-        document.getElementById('m_rocket').onclick = () => setMethod('Rocket', 3000);
-        document.getElementById('m_recharge').onclick = () => setMethod('Recharge', 200);
-
-        document.getElementById('withdraw_confirm_btn').onclick = () => {
-            let num = document.getElementById('w_num').value;
-            let amt = parseFloat(document.getElementById('w_amt').value);
-            if(new Date().getDate() !== 9) { tg.showAlert("উত্তোলন শুধুমাত্র ৯ তারিখে করা যাবে!"); return; }
-            if(!selectedMethod || isNaN(amt) || amt < min || userData.balance < amt) { 
-                tg.showAlert("সঠিক তথ্য দিন অথবা পর্যাপ্ত ব্যালেন্স নেই!"); return; 
-            }
-            userData.balance -= amt; saveData();
-            set(ref(db, 'withdraws/' + Date.now()), { userId, num, amt, method: selectedMethod, status: "Pending" });
-            tg.showAlert("রিকোয়েস্ট সফল!");
-        }
-
-        // 🎁 CHECKIN
-        for(let i=1; i<=7; i++) {
-            document.getElementById('day'+i).onclick = () => {
-                let today = new Date().toDateString();
-                if(userData.lastCheckinDate === today) { tg.showAlert("আজ নেওয়া হয়েছে!"); return; }
-                if(i !== userData.claimedDaysCount + 1) { tg.showAlert("সিরিয়াল অনুযায়ী নিন!"); return; }
-                let rewards = [0, 0.2, 0.3, 0
+       
